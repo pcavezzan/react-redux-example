@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { ChangeEvent, useState } from 'react';
 import './App.css';
+import {useDispatch, useSelector} from 'react-redux';
+import { LOAD_POKEMON, selectPokemon } from './redux';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const dispatch = useDispatch();
+    const pokemonState = useSelector(selectPokemon);
+    const [pokemonName, setPokemonName] = useState('');
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => setPokemonName(e.target.value);
+    const handleSubmit = () => dispatch({ type: LOAD_POKEMON, pokemonName });
+
+    return (
+        <div className="App">
+            <input type="text" onChange={handleChange} value={pokemonName}/>
+            <button onClick={handleSubmit}>Submit</button>
+            {pokemonState.pokemon && (
+                <div>
+                    <img src={pokemonState.pokemon.sprites.front_default} alt=""/>
+                    {pokemonState.pokemon.abilities.map(ability =>
+                        <p key={ability.name}>{ability.name}</p>
+                    )}
+                </div>
+            )}
+        </div>
+    );
 }
 
 export default App;

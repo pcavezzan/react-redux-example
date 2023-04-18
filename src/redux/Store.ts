@@ -7,4 +7,5 @@ export const store = createStore(rootReducer, rootStoreEnhancer);
 export type RootState = ReturnType<typeof store.getState>;
 // Inferred type
 export type AppDispatch = typeof store.dispatch;
+export type AppStore = typeof store;
 export const selectPokemon = (state: RootState) => state.pokemon;

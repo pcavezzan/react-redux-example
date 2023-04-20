@@ -8,7 +8,7 @@ import {
 } from "./Actions";
 import { getPokemonByName } from "../../services/pokemon";
 
-const loadPokemon = (store: MiddlewareAPI) => (next: Dispatch) => (action: Action) => {
+export const loadPokemon = (store: MiddlewareAPI) => (next: Dispatch) => (action: Action) => {
     if (action.type === LOAD_POKEMON) {
         // Make an API call to fetch todos from the server
         const loadPokemonAction = action as LoadPokemonAction;

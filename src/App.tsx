@@ -12,11 +12,11 @@ function App() {
 
     return (
         <div className="App">
-            <input type="text" onChange={handleChange} value={pokemonName}/>
+            <input type="text" placeholder="Enter the pokemon name" onChange={handleChange} value={pokemonName}/>
             <button onClick={handleSubmit}>Submit</button>
             {pokemonState.pokemon && (
                 <div>
-                    <img src={pokemonState.pokemon.sprites.front_default} alt=""/>
+                    <img src={pokemonState.pokemon.sprites.front_default} alt="logo"/>
                     {pokemonState.pokemon.abilities.map(ability =>
                         <p key={ability.name}>{ability.name}</p>
                     )}

@@ -4,15 +4,16 @@ import {
     LOAD_POKEMON_FAILURE,
     LOAD_POKEMON_SUCCESS,
     LoadPokemonAction,
-    LoadPokemonSuccessAction
+    LoadPokemonSuccessAction, PokemonAction
 } from "./Actions";
 import { getPokemonByName } from "../../services/pokemon";
 
-const loadPokemon = (store: MiddlewareAPI) => (next: Dispatch) => (action: Action) => {
+export const loadPokemon: Middleware<MiddlewareAPI, PokemonAction, Dispatch<Action>> = (store: MiddlewareAPI) => (next: Dispatch) => (action: Action) => {
+    const nextAction = next(action);
     if (action.type === LOAD_POKEMON) {
         // Make an API call to fetch todos from the server
         const loadPokemonAction = action as LoadPokemonAction;
-        getPokemonByName(loadPokemonAction.pokemonName)
+        return getPokemonByName(loadPokemonAction.pokemonName)
             .then((pokemon): LoadPokemonSuccessAction => ({
                     type: LOAD_POKEMON_SUCCESS,
                     pokemon: {
@@ -21,11 +22,12 @@ const loadPokemon = (store: MiddlewareAPI) => (next: Dispatch) => (action: Actio
                         sprites: pokemon.sprites
                     }
                 })
-            ).then((action) => store.dispatch(action))
+            ).then((action) => {
+                store.dispatch(action);
+        })
             .catch(() => store.dispatch({ type: LOAD_POKEMON_FAILURE }));
     }
-
-    return next(action)
+    return nextAction;
 }
 
 export const pokemonApiMiddlewares: Middleware[] = [loadPokemon];

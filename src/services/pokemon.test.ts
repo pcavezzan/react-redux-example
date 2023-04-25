@@ -1,17 +1,19 @@
 import {Pokemon} from "../types";
 import {getPokemonByName} from "./pokemon";
+import ky, {ResponsePromise} from "ky";
+import SpyInstance = jest.SpyInstance;
 
 describe('services/pokemon', () => {
-    let fetchMock: any = undefined;
+    let mockKy: SpyInstance<ResponsePromise>;
     const pokemon: Pokemon = {
         abilities: [{ability: {name: 'power', url: 'https://google.com'}}],
         stats: [{stat: {name: 'fire'}, base_state: 1}],
         sprites: {front_default: ''}
     };
-    const pokemonFetchMock = () => Promise.resolve({ok: true, status: 200, json: async () => (pokemon)} as Response);
 
     beforeEach(() => {
-        fetchMock = jest.spyOn(global, "fetch").mockImplementation(pokemonFetchMock);
+        mockKy = jest.spyOn(ky, 'get');
+        mockKy.mockResolvedValue({json: async () => pokemon} as ResponsePromise);
     });
 
     afterEach(() => {
@@ -22,7 +24,12 @@ describe('services/pokemon', () => {
         const pokemonByName = await getPokemonByName('ditto');
 
         expect(pokemonByName).toEqual(pokemon);
-        expect(fetchMock).toHaveBeenCalledWith('https://pokeapi.co/api/v2/pokemon/ditto', {method: "GET"});
+    })
+
+    test('getPokemonByNAme should get pokemon from pokeapi', async () => {
+        await getPokemonByName('ditto');
+
+        expect(mockKy).toHaveBeenCalledWith('https://pokeapi.co/api/v2/pokemon/ditto');
     })
 
 });

@@ -7,11 +7,14 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
+    "@types/jest-when": "^3.5.2",
     "@types/node": "^16.18.23",
     "@types/react": "^18.0.35",
     "@types/react-dom": "^18.0.11",
     "@types/react-redux": "^7.1.25",
     "@types/redux": "^3.6.0",
+    "jest-when": "^3.5.2",
+    "ky": "^0.33.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
@@ -47,5 +50,10 @@
   },
   "devDependencies": {
     "msw": "^1.2.1"
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(ky))"
+    ]
   }
 }
